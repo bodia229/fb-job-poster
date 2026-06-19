@@ -1,0 +1,15 @@
+{
+  "graph_version": "v21.0",
+  "pages": [
+    {
+      "name": "Моя страница 1",
+      "page_id": "100000000000001",
+      "access_token": "PAGE_ACCESS_TOKEN_1"
+    },
+    {
+      "name": "Моя страница 2",
+      "page_id": "100000000000002",
+      "access_token": "PAGE_ACCESS_TOKEN_2"
+    }
+  ]
+}
