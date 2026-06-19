@@ -1,0 +1,10 @@
+# Зависимости для десктоп-версии (в дополнение к requirements.txt)
+-r requirements.txt
+pywebview>=5.0
+
+# Бэкенд окна по платформе:
+#   Windows — ставится автоматически (EdgeChromium/WebView2).
+#   macOS   — ставится автоматически (WKWebView).
+#   Linux   — нужен GTK или Qt бэкенд, например:
+#       pip install pywebview[qt]
+#     или системные пакеты: python3-gi gir1.2-webkit2-4.1

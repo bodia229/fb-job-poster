@@ -145,15 +145,24 @@ async function doPublish(dryRun) {
 }
 
 async function connect() {
-  toast("Открываю браузер для входа в Facebook...", "");
+  const btn = $("connectBtn");
+  btn.disabled = true;
+  const label = btn.textContent;
+  btn.textContent = "Открываю браузер...";
+  toast("Открылся вход в Facebook. Войди и нажми «Разрешить»...", "");
   try {
     const r = await fetch("/api/login", { method: "POST" }).then((r) => r.json());
-    if (r.started) {
-      toast("Открылось окно входа. После «Разрешить» нажми «Подключить» снова.", "ok");
+    if (r.ok) {
+      toast(`Подключено страниц: ${r.count}.`, "ok");
+      await loadStatus();
     } else {
-      toast("Не удалось запустить вход: " + (r.error || ""), "err");
+      toast("Вход не удался: " + (r.error || ""), "err");
     }
-  } catch (e) { toast("Ошибка: " + e.message, "err"); }
+  } catch (e) {
+    toast("Ошибка: " + e.message, "err");
+  } finally {
+    btn.disabled = false; btn.textContent = label;
+  }
 }
 
 // --- события ---------------------------------------------------------

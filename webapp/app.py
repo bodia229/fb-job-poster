@@ -7,7 +7,6 @@
 """
 from __future__ import annotations
 
-import subprocess
 import sys
 import time
 from datetime import datetime
@@ -17,11 +16,21 @@ from flask import Flask, jsonify, render_template, request
 
 from fbposter import GraphAPI, Poster, load_pages
 from fbposter.poster import _VARY_EMOJI, vary_text
+from login import app_dir, run_login
 
-ROOT = Path(__file__).resolve().parent.parent
-CONFIG = ROOT / "config.json"
+# config.json лежит рядом с программой (в сборке — возле .exe)
+CONFIG = app_dir() / "config.json"
 
-app = Flask(__name__)
+
+def _resource(rel: str) -> str:
+    """Путь к ресурсу — работает и из исходников, и в сборке PyInstaller."""
+    base = getattr(sys, "_MEIPASS", str(Path(__file__).resolve().parent))
+    return str(Path(base) / rel)
+
+
+app = Flask(__name__,
+            template_folder=_resource("templates"),
+            static_folder=_resource("static"))
 
 
 def _build_poster() -> Poster:
@@ -108,12 +117,15 @@ def publish():
 
 @app.route("/api/login", methods=["POST"])
 def login():
-    """Запустить вход через браузер (login.py) фоновым процессом."""
+    """Вход через браузер и сбор токенов (выполняется в этом же процессе).
+
+    Запрос блокируется, пока пользователь не завершит вход в браузере.
+    """
     try:
-        subprocess.Popen([sys.executable, str(ROOT / "login.py")], cwd=str(ROOT))
-        return jsonify(started=True)
+        res = run_login(CONFIG)
     except Exception as e:  # noqa: BLE001
-        return jsonify(started=False, error=str(e)), 500
+        return jsonify(ok=False, error=str(e)), 500
+    return (jsonify(res), 200 if res.get("ok") else 400)
 
 
 if __name__ == "__main__":
