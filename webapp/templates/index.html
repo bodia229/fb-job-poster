@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>FB Job Poster</title>
+  <link rel="stylesheet" href="/static/style.css">
+</head>
+<body>
+  <header class="topbar">
+    <div class="brand">
+      <span class="logo">📣</span>
+      <div>
+        <h1>FB Job Poster</h1>
+        <p class="sub">Публикация вакансий на твои страницы</p>
+      </div>
+    </div>
+    <div class="conn">
+      <span id="statusPill" class="pill pill--off">● не подключено</span>
+      <button id="connectBtn" class="btn btn--ghost">Подключить страницы</button>
+    </div>
+  </header>
+
+  <main class="layout">
+    <!-- ЛЕВО: композер -->
+    <section class="card composer">
+      <h2>Новый пост</h2>
+
+      <label class="field">
+        <span>Текст вакансии</span>
+        <textarea id="text" rows="7" placeholder="Ищем повара в «{page}»! График 5/2, з/п от 25000.&#10;Звони: +380 ...">Ищем сотрудника в «{page}»! 🙌
+График 5/2, з/п от 25 000.
+Пиши в личку или звони: +380 99 123 45 67</textarea>
+        <small class="hint">Подсказка: <code>{page}</code> подставит имя страницы.</small>
+      </label>
+
+      <label class="field">
+        <span>Баннер (URL картинки)</span>
+        <input id="image" type="url" placeholder="https://.../banner.jpg">
+      </label>
+
+      <label class="field">
+        <span>Ссылка (необязательно)</span>
+        <input id="link" type="url" placeholder="https://t.me/...">
+      </label>
+
+      <div class="row">
+        <label class="field">
+          <span>Запланировать</span>
+          <input id="at" type="datetime-local">
+          <small class="hint">Пусто = опубликовать сразу.</small>
+        </label>
+      </div>
+
+      <fieldset class="field">
+        <span class="legend">Анти-спам</span>
+        <label class="check"><input type="checkbox" id="vary" checked> Варьировать текст между страницами</label>
+        <div class="row delays">
+          <label>Пауза от <input id="delayMin" type="number" value="2" min="0" step="1"> сек</label>
+          <label>до <input id="delayMax" type="number" value="6" min="0" step="1"> сек</label>
+        </div>
+      </fieldset>
+
+      <fieldset class="field">
+        <span class="legend">Куда публиковать</span>
+        <div class="pages-head">
+          <button id="selAll" class="link">все</button> ·
+          <button id="selNone" class="link">никого</button>
+        </div>
+        <div id="pages" class="pages"></div>
+      </fieldset>
+
+      <div class="actions">
+        <button id="previewBtn" class="btn btn--ghost">Предпросмотр</button>
+        <button id="publishBtn" class="btn btn--primary">Опубликовать</button>
+      </div>
+      <div id="toast" class="toast"></div>
+    </section>
+
+    <!-- ПРАВО: превью -->
+    <section class="card preview">
+      <h2>Превью</h2>
+      <div id="tabs" class="tabs"></div>
+
+      <div class="fb-card">
+        <div class="fb-head">
+          <div id="avatar" class="avatar">F</div>
+          <div>
+            <div id="fbName" class="fb-name">Моя страница</div>
+            <div class="fb-meta">Только что · 🌐</div>
+          </div>
+        </div>
+        <div id="fbText" class="fb-text"></div>
+        <div id="fbImageWrap" class="fb-image-wrap" hidden>
+          <img id="fbImage" alt="баннер">
+        </div>
+        <div class="fb-actions">
+          <span>👍 Нравится</span><span>💬 Комментировать</span><span>↗ Поделиться</span>
+        </div>
+      </div>
+
+      <div id="results" class="results"></div>
+    </section>
+  </main>
+
+  <script src="/static/app.js"></script>
+</body>
+</html>
